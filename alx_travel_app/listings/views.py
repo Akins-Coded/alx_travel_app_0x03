@@ -2,14 +2,15 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, viewsets
 from django.shortcuts import get_object_or_404
 from django.conf import settings
 import requests
 
 from .models import Listing, Booking, Payment
 from .serializers import ListingSerializer, BookingSerializer
-from .tasks import send_payment_confirmation_email
+from .tasks import send_payment_confirmation_email, send_booking_confirmation_email
+
 
 # ----------------------------
 # Helper function for Chapa
@@ -123,3 +124,12 @@ class ListingViewSet(ModelViewSet):
 class BookingViewSet(ModelViewSet):
     queryset = Booking.objects.all()
     serializer_class = BookingSerializer
+
+class BookingViewSet(viewsets.ModelViewSet):
+    queryset = Booking.objects.all()
+    serializer_class = BookingSerializer
+
+    def perform_create(self, serializer):
+        booking = serializer.save()
+        # Trigger async email
+        send_booking_confirmation_email.delay(booking.user.email, booking.id)

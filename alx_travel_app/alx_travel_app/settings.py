@@ -133,3 +133,12 @@ CELERY_TASK_SERIALIZER = "json"
 
 # --- PAYMENTS / KEYS ---
 CHAPA_SECRET_KEY = env("CHAPA_SECRET_KEY", default="")
+
+# Email Config (update with your SMTP details)
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"       # Example: Gmail
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = "akindipemuheez@gmail.com"
+EMAIL_HOST_PASSWORD = "your_password_or_app_password"
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

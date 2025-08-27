@@ -38,7 +38,7 @@ class Booking(models.Model):
 
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name='bookings')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='bookings')
-    user_email = models.EmailField(max_length=255, null=True, blank=True, Unique=True)
+    user_email = models.EmailField(max_length=255, null=True, blank=True, unique=True)
     check_in = models.DateField()
     check_out = models.DateField()
     guests = models.PositiveIntegerField()
